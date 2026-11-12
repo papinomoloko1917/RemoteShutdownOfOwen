@@ -1,5 +1,9 @@
 # RemoteShutdownOfOwen — навигация по V2
 
+> **Актуальная документация 12.11.2026.** **D-02 согласовано (поведение):** после ремонта оптики ПР103 **остаётся в разрешённом LOCAL**, пока персонал не совершит **новое сознательное действие**, а перед выходом не будет проверено актуальное состояние SB1. Modbus OK, новый HB и старый STOP=0 не выводят из LOCAL и не очищают LOCK. Повторное нажатие SB3 — пока инженерное предложение (D-03 OPEN); свежесть SB1, рестарты и replay (D-01/D-04), времена и реакция на SB1=1 (D-13–D-15) также OPEN. Полная история: `PROJECT_STATUS.md` §23; checkpoint редакция 12 в `README_CHECKPOINT.md`. **Источник ОВЕН:** «Owen Logic (версия 3.3). Руководство пользователя», версия 2.12, 09.2026; `references/owen/manuals/rp_owen_logic.pdf`; §4.5 стр. 59–62 (SIM), §5.3.2 стр. 111–113 и §5.3.2.1 стр. 121–123 (Modbus Master), §7.2.1 стр. 163–165 (RS/SR/RTRIG/FTRIG), §7.2.2.2 стр. 167–168 (TON). Детали: `docs/reference/OWEN_LOGIC_SOURCE_AUDIT.md`.
+>
+> Канонические документы: `AI_HANDOFF.md`, `docs/architecture/OPERATING_MODES_V2.md`, `docs/architecture/SAFETY_AND_OPEN_DECISIONS.md`, `docs/architecture/MODBUS_AND_FRESHNESS.md`, `docs/testing/SIM_TEST_PLAN_V2.md`. Индекс: `docs/README.md`. Дубли `_CURRENT` устранены.
+
 > **Актуализация 12.11.2026 — МЭ210-701, OWEN FIRST.** Прежде чем программировать измерения трёх фаз, прочитать [`docs/reference/ME210_701_OWEN_SOURCE_AUDIT.md`](docs/reference/ME210_701_OWEN_SOURCE_AUDIT.md) и РЭ `references/owen/manuals/re_me210-701.pdf` (v1.41, 06.2026). Также добавлены руководство по примерам Mx210 и два каталога ОВЕН. Карта DEC 5240/5242/5244 (FLOAT32) и 5340 (UINT32) **подтверждена РЭ**, но в V2 не реализована; все тесты `V2-ME` — `NOT RUN`. Дополнение записано в `PROJECT_STATUS.md` §22. Исторические P03/P04-01 PASS-SIM, T35/P04-02 FAIL-SIM не менялись. GitHub и `.owle` не изменялись этим пакетом.
 
 
@@ -19,7 +23,7 @@
 10. **`docs/reference/OWEN_REFERENCE_NOTES.md`** — что именно подтверждено документацией ОВЕН и примерами.
 11. **`docs/reference/FILE_MIGRATION_PLAN.md`** — точный перенос ВСЕХ существующих файлов (без удалений и без GitHub push).
 12. **`PROJECT_STATUS.md`** — полный журнал §§1–20 без потерь, с новым §21 про начало V2.
-13. **`README_CHECKPOINT.md`** — редакция 10, сохраняет архив редакций 9/8/7.
+13. **`README_CHECKPOINT.md`** — редакция 12, сохраняет редакции 11/10/9/8/7 без изменения их исторического текста.
 
 ## Одно главное правило
 
