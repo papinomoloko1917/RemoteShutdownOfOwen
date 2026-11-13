@@ -1,16 +1,20 @@
 # Документация RemoteShutdownOfOwen V2
 
-**V2-A APPROVED FOR SIM DESIGN / NOT IMPLEMENTED / NOT TESTED / HW NOT APPROVED.** Owen Logic 3.3.378.0, цикл SIM 100 мс.
+**Состояние на 14.11.2026: V2-A UNIT-SIM PARTIALLY VERIFIED; REAL MODBUS NOT VERIFIED; HW NOT APPROVED.** Owen Logic 3.3.378.0, шаг SIM 100 мс. Нельзя превращать наблюдения с синтетическими `I2/I6` в доказательство актуальности физической SB1.
 
-1. [AI_HANDOFF / OWEN FIRST](../AI_HANDOFF.md), [README](../README.md), [README_CHECKPOINT редакция 13](../README_CHECKPOINT.md).
-2. [Режимы ПР103](architecture/OPERATING_MODES_V2.md) и [реестр решений](architecture/SAFETY_AND_OPEN_DECISIONS.md).
-3. [Архитектура](architecture/V2_ARCHITECTURE_DRAFT.md), [Modbus и свежесть](architecture/MODBUS_AND_FRESHNESS.md), [ТЗ](architecture/REQUIREMENTS_TRACEABILITY.md).
-4. [План разработки](development/V2_WORK_PLAN.md), [план SIM](testing/SIM_TEST_PLAN_V2.md), [исторические результаты](testing/HISTORICAL_SIM_RESULTS.md).
-5. [Официальные источники Owen Logic](reference/OWEN_LOGIC_SOURCE_AUDIT.md), [МЭ210-701](reference/ME210_701_OWEN_SOURCE_AUDIT.md), [заметки ОВЕН](reference/OWEN_REFERENCE_NOTES.md).
-6. [Журнал проекта](../PROJECT_STATUS.md) — §24 актуальный, §23 и более ранние — история.
+## С чего начать
 
-История решений — `history/`, архивные программы — `../archive/` (без изменений). [Карта миграции](reference/FILE_MIGRATION_PLAN.md) — историческая.
+1. [Правила и передача контекста](../AI_HANDOFF.md) — **OWEN FIRST**, ограничения безопасности, актуальная точка; [главный README](../README.md).
+2. [Действующие файлы V2](../programs/v2/README.md) — только один рабочий проект ПР103 и текст REV2 для проверки соответствия; ПР205 V2 пока не разработан.
+3. [Протокол Unit-SIM 13.11](testing/V2_SIM_RESULTS_2026-11-13.md) и [план следующих испытаний](testing/SIM_TEST_PLAN_V2.md). N-04b NOT VERIFIED, N-05b NOT TESTED, остальные статусы — строго по протоколу; [исторические SIM](testing/HISTORICAL_SIM_RESULTS.md) не переаттестованы.
+4. [Пять режимов V2-A](architecture/OPERATING_MODES_V2.md), [пределы безопасности и решения](architecture/SAFETY_AND_OPEN_DECISIONS.md), [Modbus/свежесть](architecture/MODBUS_AND_FRESHNESS.md) и [трассировка требований](architecture/REQUIREMENTS_TRACEABILITY.md).
+5. [Рабочий план](development/V2_WORK_PLAN.md): ПР205 SIM-передатчик только после согласования модели данных; D-01/D-04 свежесть/рестарты остаются открыты.
+6. [Журнал статуса](../PROJECT_STATUS.md) §25–26, [checkpoint](../README_CHECKPOINT.md), [акт ревизии репозитория 14.11](history/REPOSITORY_CLEANUP_2026-11-14.md).
 
-**УТВЕРЖДЕНО 12.11.2026 — V2-A / SIM_ONLY:** ПР205 передаёт SB1; ПР103 использует пять состояний `INIT_UNTRUSTED`, `REMOTE`, `LOSS_LOCK`, `LOCAL`, `RECOVERY_WAIT` и раздельные `STOP_REQUEST`/`RELEASE_PERMISSION`. Существующая SB3 используется для **двух отдельных новых нажатий**: вход в LOCAL из LOSS_LOCK и запрос возврата из LOCAL после ремонта оптики. Между нажатиями обязательно отпускание; удержание при запуске не считается новым действием. Восстановление Modbus/HB/старого STOP=0 само не выводит из LOCAL. Подтверждённая **текущая** SB1=1 имеет приоритет STOP даже в LOCAL; STOP не снимается последующей SB1=0 без разрешённого перехода. При неудаче проверки или повторном обрыве во время RECOVERY_WAIT → LOSS_LOCK, STOP=1; возврат в REMOTE лишь после санкции персонала и подтверждения SB1=0.
+## Источники и история
 
-**Граница утверждения:** `APPROVED FOR SIM DESIGN / NOT IMPLEMENTED / NOT TESTED / HW NOT APPROVED`. **D-01/D-04 OPEN:** действительная свежесть SB1 при незамеченных рестартах, replay/wrap/старых данных не доказана; HB и Modbus status недостаточны. Для SIM автомата допускаются *искусственно заданные* валидные входы, но не утверждение реального обмена. Времена D-13/D-14, МЭ210 D-09, аппаратные D-05–D-12 OPEN. ТЗ ред. 6 — ПРОЕКТ. Физические Q/K1/SB2/ЩАО/МЭ210 не трогать; новых `.owle` и PASS-SIM V2 нет; T35/P04-02 остаются FAIL-SIM.
+- [Официальное руководство Owen Logic 3.3 — аудит](reference/OWEN_LOGIC_SOURCE_AUDIT.md), [заметки по ОВЕН](reference/OWEN_REFERENCE_NOTES.md), [МЭ210-701 — аудит](reference/ME210_701_OWEN_SOURCE_AUDIT.md); первичные файлы — в [references/owen](../references/owen/).
+- [Эскиз архитектуры](architecture/V2_ARCHITECTURE_DRAFT.md), [история решений](history/V2_RESTART_DECISION_LOG.md), [карта миграции (история)](reference/FILE_MIGRATION_PLAN.md), [архивные исходники](../archive/README.md).
+- ТЗ ред. 6 — **ПРОЕКТ**; указанная там структурная схема ред. 2 отсутствует в репозитории. Имеется только ред. 1; документы — [specification](../specification/README.md).
+
+**Неприкосновенные ограничения:** никаких физических Q, K1, SB2, ЩАО, МЭ210 или реального Modbus в пределах текущего SIM. Не заявлять PL/SIL, готовность к вводу в эксплуатацию или снятие защитной блокировки на основании Modbus status/HB. Исторические T35/P04-02 — FAIL-SIM, D-01/D-04 OPEN.

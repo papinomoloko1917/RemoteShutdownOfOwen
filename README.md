@@ -1,5 +1,12 @@
 # RemoteShutdownOfOwen — навигация по V2
 
+> **ТЕКУЩАЯ ТОЧКА — 14.11.2026, GitHub `main` после ревизии каталога.** Рабочая единица V2-A: [`programs/v2/PR103_CONTROL_V2_SIM_ONLY.owle`](programs/v2/PR103_CONTROL_V2_SIM_ONLY.owle), Git blob `2d7bd9ae20c807cd5a57cba6674e3ba209e8b1b7`. Рядом текстовая эталонная для сверки REV2 — [`V2_MODE_CORE_SYNC_REV2.st`](programs/v2/V2_MODE_CORE_SYNC_REV2.st), blob `21421a69e50b78c3fd9b77dc0f8c6aea95886efb`. **Побайтовое соответствие ST внутри .owle этому тексту ещё не подтверждено**; файлы опубликованы, но аппаратный обмен не проверен.
+>
+> **Уборка 14.11:** лишняя корневая копия `.owle` и прежняя ST-редакция перенесены в [архив 13.11](archive/programs/2026-11-13/) без изменения байтов. Исходный HEAD `2eb4ca4` защищён веткой `backup/pre-cleanup-v2a-20261114`. Подробности: [аудит уборки](docs/history/REPOSITORY_CLEANUP_2026-11-14.md). Прежние утверждения ниже о «локальном, не опубликованном проекте» относятся **к состоянию на дату их записи**.
+>
+> **Текущее техническое ограничение:** только `SIM_ONLY`; подтверждена часть переходов автомата по скриншотам, **N-04b не подтверждён**, **N-05b не выполнен**. `D-01/D-04` (настоящая свежесть, reboot/replay/wrap), `D-13/D-14` (время), аппаратные вопросы — OPEN. T35/P04-02 — исторические FAIL-SIM. Физические Q/K1/SB2/ЩАО/МЭ210 не трогать; `RELEASE_PERMISSION` — диагностическое разрешение, не пуск. [Протокол](docs/testing/V2_SIM_RESULTS_2026-11-13.md), [план](docs/development/V2_WORK_PLAN.md), [первичный индекс](docs/README.md).
+
+
 > **СВЕЖАЯ ЗАПИСЬ 13.11.2026 (поверх исторического checkpoint ниже):** новый **локальный** прототип ПР103 `PR103_CONTROL_V2_SIM_ONLY.owle` с ST-блоком `V2_MODE_CORE REV2` создан и проверялся в Owen Logic 3.3.378.0 на искусственных I1–I6/FI1. Основная последовательность `INIT→REMOTE→LOSS_LOCK→LOCAL→RECOVERY_WAIT→REMOTE`, N-01–N-03 и отказ старого уровня I6 (N-04a) наблюдались. **N-04b остаётся без окончательного подтверждения, N-05b (рестарт с удержанной SB3) не проведён**. Точная ведомость: [`docs/testing/V2_SIM_RESULTS_2026-11-13.md`](docs/testing/V2_SIM_RESULTS_2026-11-13.md), `PROJECT_STATUS.md` §25, `README_CHECKPOINT.md` ред. 14. Сведения ниже с фразами «V2 не реализована / нет PASS-SIM» относятся к историческому состоянию 12.11.2026.
 >
 > **Граница:** `UNIT-SIM PARTIALLY VERIFIED / REAL MODBUS NOT VERIFIED / HW NOT APPROVED`. `.owle` не сверялся побайтово с `main`; D-01/D-04 OPEN, T35/P04-02 FAIL-SIM сохраняются. Q/K1/SB2/ЩАО/МЭ210 не подключались; commit/push не выполнен.
